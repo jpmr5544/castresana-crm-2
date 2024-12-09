@@ -1,0 +1,2219 @@
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
+
+const Auth = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold">
+            {isLogin ? 'Iniciar Sesión' : 'Registrarse'}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Correo Electrónico</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 text-gray-400" size={20} />
+                <input
+                  type="email"
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg"
+                  placeholder="correo@ejemplo.com"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Contraseña</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 text-gray-400" size={20} />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="w-full pl-10 pr-10 py-2 border rounded-lg"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-3 text-gray-400"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            {!isLogin && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Confirmar Contraseña</label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 text-gray-400" size={20} />
+                  <input
+                    type="password"
+                    className="w-full pl-10 pr-4 py-2 border rounded-lg"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+            >
+              {isLogin ? 'Iniciar Sesión' : 'Registrarse'}
+            </button>
+          </form>
+
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-blue-600 hover:underline"
+            >
+              {isLogin ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
+            </button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default Auth;
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Search, Plus, Phone, Mail, Home, FileText } from 'lucide-react';
+
+const ClientManagement = () => {
+  const [clients] = useState([
+    {
+      id: 1,
+      name: 'Ana García',
+      email: 'ana.garcia@email.com',
+      phone: '+34 666 555 444',
+      status: 'Activo',
+      interests: 'Compra',
+      lastContact: '2024-03-08',
+      properties: ['Ático Gran Vía', 'Chalet Castresana']
+    }
+  ]);
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Gestión de Clientes</h1>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2">
+          <Plus size={20} />
+          Nuevo Cliente
+        </button>
+      </div>
+
+      <div className="mb-6">
+        <div className="relative">
+          <Search className="absolute left-3 top-3 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Buscar clientes..."
+            className="w-full pl-10 pr-4 py-2 border rounded-lg"
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-6">
+        {clients.map(client => (
+          <ClientCard key={client.id} client={client} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ClientCard = ({ client }) => {
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <div className="grid md:grid-cols-4 gap-6">
+          <div className="space-y-4">
+            <div>
+              <h3 className="text-xl font-semibold">{client.name}</h3>
+              <span className="inline-block mt-2 px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                {client.status}
+              </span>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-gray-600">
+                <Mail size={18} />
+                <span>{client.email}</span>
+              </div>
+              <div className="flex items-center gap-2 text-gray-600">
+                <Phone size={18} />
+                <span>{client.phone}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="font-medium">Intereses</h4>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Home size={18} className="text-blue-500" />
+                <span>{client.interests}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="font-medium">Propiedades de Interés</h4>
+            <div className="space-y-2">
+              {client.properties.map((property, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <Home size={18} className="text-gray-400" />
+                  <span>{property}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="font-medium">Acciones</h4>
+            <div className="flex gap-2">
+              <button className="flex items-center gap-2 px-3 py-2 border rounded-lg hover:bg-gray-50">
+                <Phone size={18} />
+                Llamar
+              </button>
+              <button className="flex items-center gap-2 px-3 py-2 border rounded-lg hover:bg-gray-50">
+                <Mail size={18} />
+                Email
+              </button>
+              <button className="flex items-center gap-2 px-3 py-2 border rounded-lg hover:bg-gray-50">
+                <FileText size={18} />
+                Notas
+              </button>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default ClientManagement;
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FileText, Upload, Folder, Download, Search, Filter } from 'lucide-react';
+
+const DocumentStorage = () => {
+  const [documents] = useState([
+    {
+      id: 1,
+      name: 'Contrato_Compraventa_2024_001.pdf',
+      type: 'Contrato',
+      size: '2.4 MB',
+      date: '2024-03-09',
+      property: 'Ático Gran Vía',
+      status: 'Pendiente firma'
+    }
+  ]);
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Documentos</h1>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2">
+          <Upload size={20} />
+          Subir Documento
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Folder className="text-blue-500" size={24} />
+              <div>
+                <p className="font-medium">Contratos</p>
+                <p className="text-sm text-gray-500">24 archivos</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Folder className="text-green-500" size={24} />
+              <div>
+                <p className="font-medium">Escrituras</p>
+                <p className="text-sm text-gray-500">12 archivos</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle>Documentos Recientes</CardTitle>
+            <div className="flex gap-2">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 text-gray-400" size={16} />
+                <input
+                  type="text"
+                  placeholder="Buscar documentos..."
+                  className="pl-9 pr-4 py-2 border rounded-lg text-sm"
+                />
+              </div>
+              <button className="flex items-center gap-2 px-3 py-2 border rounded-lg hover:bg-gray-50">
+                <Filter size={16} />
+                Filtrar
+              </button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="divide-y">
+            {documents.map(doc => (
+              <DocumentRow key={doc.id} document={doc} />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+const DocumentRow = ({ document }) => {
+  return (
+    <div className="py-4 flex items-center justify-between">
+      <div className="flex items-center gap-4">
+        <FileText className="text-gray-400" size={24} />
+        <div>
+          <p className="font-medium">{document.name}</p>
+          <div className="flex gap-2 text-sm text-gray-500">
+            <span>{document.type}</span>
+            <span>•</span>
+            <span>{document.size}</span>
+            <span>•</span>
+            <span>{document.property}</span>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center gap-4">
+        <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+          {document.status}
+        </span>
+        <button className="p-2 hover:bg-gray-100 rounded-full">
+          <Download size={20} className="text-gray-500" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default DocumentStorage;
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail, Clock, Users, Send, Plus } from 'lucide-react';
+
+const EmailAutomation = () => {
+  const [campaigns] = useState([
+    {
+      id: 1,
+      name: 'Seguimiento Visitas',
+      status: 'Activo',
+      recipients: 45,
+      lastSent: '2024-03-09',
+      type: 'Automático',
+      trigger: 'Post-visita propiedad'
+    }
+  ]);
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Automatización de Email</h1>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2">
+          <Plus size={20} />
+          Nueva Campaña
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Send className="text-blue-500" size={24} />
+              <div>
+                <p className="font-medium">Emails Enviados</p>
+                <p className="text-2xl font-bold">1,234</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Users className="text-green-500" size={24} />
+              <div>
+                <p className="font-medium">Tasa de Apertura</p>
+                <p className="text-2xl font-bold">68%</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Clock className="text-purple-500" size={24} />
+              <div>
+                <p className="font-medium">Campañas Activas</p>
+                <p className="text-2xl font-bold">5</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Campañas de Email</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="divide-y">
+            {campaigns.map(campaign => (
+              <CampaignRow key={campaign.id} campaign={campaign} />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+const CampaignRow = ({ campaign }) => {
+  return (
+    <div className="py-4 flex items-center justify-between">
+      <div className="flex items-center gap-4">
+        <Mail className="text-gray-400" size={24} />
+        <div>
+          <p className="font-medium">{campaign.name}</p>
+          <div className="flex gap-2 text-sm text-gray-500">
+            <span>{campaign.type}</span>
+            <span>•</span>
+            <span>Trigger: {campaign.trigger}</span>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center gap-6">
+        <div className="text-sm text-gray-500">
+          <p>{campaign.recipients} destinatarios</p>
+          <p>Último envío: {campaign.lastSent}</p>
+        </div>
+        <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+          {campaign.status}
+        </span>
+      </div>
+    </div>
+  );
+};
+
+export default EmailAutomation;
+// portalService.js
+class PortalIntegration {
+  constructor() {
+    this.portals = {
+      idealista: {
+        apiUrl: 'https://api.idealista.com/v1',
+        apiKey: process.env.IDEALISTA_API_KEY
+      },
+      fotocasa: {
+        apiUrl: 'https://api.fotocasa.com/v1',
+        apiKey: process.env.FOTOCASA_API_KEY
+      }
+    };
+  }
+
+  async publishProperty(property, portals = ['idealista', 'fotocasa']) {
+    const results = [];
+    
+    for (const portal of portals) {
+      try {
+        const portalData = this.formatPropertyForPortal(property, portal);
+        const result = await this.sendToPortal(portalData, portal);
+        results.push({ portal, status: 'success', id: result.id });
+      } catch (error) {
+        results.push({ portal, status: 'error', message: error.message });
+      }
+    }
+    
+    return results;
+  }
+
+  formatPropertyForPortal(property, portal) {
+    const formatters = {
+      idealista: (prop) => ({
+        operation: prop.type,
+        price: prop.price,
+        size: prop.area,
+        rooms: prop.bedrooms,
+        bathrooms: prop.bathrooms,
+        location: {
+          address: prop.address,
+          latitude: prop.latitude,
+          longitude: prop.longitude
+        },
+        description: prop.description,
+        images: prop.images
+      }),
+      fotocasa: (prop) => ({
+        propertyType: prop.category,
+        transaction: prop.type,
+        price: prop.price,
+        surface: prop.area,
+        rooms: prop.bedrooms,
+        bathrooms: prop.bathrooms,
+        address: {
+          street: prop.address,
+          coordinates: {
+            lat: prop.latitude,
+            lon: prop.longitude
+          }
+        },
+        description: prop.description,
+        multimedia: prop.images
+      })
+    };
+
+    return formatters[portal](property);
+  }
+
+  async sendToPortal(data, portal) {
+    const portalConfig = this.portals[portal];
+    const response = await fetch(`${portalConfig.apiUrl}/properties`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${portalConfig.apiKey}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error publishing to ${portal}: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  async updateProperty(propertyId, updates, portals = ['idealista', 'fotocasa']) {
+    const results = [];
+    
+    for (const portal of portals) {
+      try {
+        const portalData = this.formatPropertyForPortal(updates, portal);
+        const result = await this.updateInPortal(propertyId, portalData, portal);
+        results.push({ portal, status: 'success', id: result.id });
+      } catch (error) {
+        results.push({ portal, status: 'error', message: error.message });
+      }
+    }
+    
+    return results;
+  }
+
+  async updateInPortal(propertyId, data, portal) {
+    const portalConfig = this.portals[portal];
+    const response = await fetch(`${portalConfig.apiUrl}/properties/${propertyId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${portalConfig.apiKey}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error updating in ${portal}: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+}
+
+export default new PortalIntegration();
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MapPin, Bed, Bath, Square, Euro, Calendar, Camera, Share2, Heart, Map } from 'lucide-react';
+
+const PropertyDetails = () => {
+  const [property] = useState({
+    id: 1,
+    title: 'Ático de Lujo con Terraza',
+    address: 'Paseo Castresana 123, Bilbao',
+    price: 450000,
+    type: 'Venta',
+    status: 'Disponible',
+    features: {
+      bedrooms: 3,
+      bathrooms: 2,
+      area: 120,
+      terrace: 30,
+      parking: 1,
+      storage: true,
+      year: 2020,
+      floor: 8
+    },
+    amenities: ['Calefacción', 'Aire acondicionado', 'Ascensor', 'Piscina', 'Seguridad 24h'],
+    description: 'Exclusivo ático con vistas panorámicas...',
+    virtualTour: 'https://tour.example.com/123',
+    energyCert: 'A',
+    views: 1250,
+    saves: 45,
+    lastUpdate: '2024-03-09'
+  });
+
+  return (
+    <div className="bg-gray-50 min-h-screen">
+      <div className="relative h-96">
+        <img
+          src="/api/placeholder/1200/400"
+          alt={property.title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-4 right-4 space-x-2">
+          <button className="bg-white p-2 rounded-full hover:bg-gray-100">
+            <Share2 size={20} />
+          </button>
+          <button className="bg-white p-2 rounded-full hover:bg-gray-100">
+            <Heart size={20} />
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <div className="mb-6">
+              <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
+              <div className="flex items-center text-gray-600">
+                <MapPin size={20} className="mr-2" />
+                <span>{property.address}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <StatCard icon={<Bed />} title="Dormitorios" value={property.features.bedrooms} />
+              <StatCard icon={<Bath />} title="Baños" value={property.features.bathrooms} />
+              <StatCard icon={<Square />} title="Superficie" value={`${property.features.area}m²`} />
+              <StatCard icon={<Square />} title="Terraza" value={`${property.features.terrace}m²`} />
+            </div>
+
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle>Características</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {Object.entries(property.features).map(([key, value]) => (
+                    <div key={key} className="flex items-center gap-2">
+                      <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                      <span className="capitalize">{key}: {value}</span>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle>Descripción</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600 whitespace-pre-line">{property.description}</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Ubicación</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-96 bg-gray-200 rounded-lg flex items-center justify-center">
+                  <Map size={48} className="text-gray-400" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="lg:col-span-1">
+            <Card className="sticky top-4">
+              <CardContent className="p-6">
+                <div className="mb-6">
+                  <span className="text-3xl font-bold">€{property.price.toLocaleString()}</span>
+                  <span className="text-gray-500 ml-2">{property.type}</span>
+                </div>
+
+                <div className="space-y-4 mb-6">
+                  <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
+                    Contactar
+                  </button>
+                  <button className="w-full border border-blue-600 text-blue-600 py-3 rounded-lg hover:bg-blue-50">
+                    Programar Visita
+                  </button>
+                </div>
+
+                <div className="divide-y">
+                  <PropertyStat
+                    icon={<Camera size={20} />}
+                    label="Tour Virtual Disponible"
+                    value="Ver Tour"
+                    className="text-blue-600 cursor-pointer"
+                  />
+                  <PropertyStat
+                    icon={<Calendar size={20} />}
+                    label="Última actualización"
+                    value={property.lastUpdate}
+                  />
+                  <PropertyStat
+                    icon={<Euro size={20} />}
+                    label="Certificación energética"
+                    value={`Clase ${property.energyCert}`}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const StatCard = ({ icon, title, value }) => (
+  <Card>
+    <CardContent className="p-4">
+      <div className="flex items-center gap-2 text-gray-600 mb-1">
+        {icon}
+        <span className="text-sm">{title}</span>
+      </div>
+      <p className="text-xl font-semibold">{value}</p>
+    </CardContent>
+  </Card>
+);
+
+const PropertyStat = ({ icon, label, value, className = "text-gray-900" }) => (
+  <div className="flex items-center justify-between py-3">
+    <div className="flex items-center gap-2 text-gray-600">
+      {icon}
+      <span>{label}</span>
+    </div>
+    <span className={className}>{value}</span>
+  </div>
+);
+
+export default PropertyDetails;
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users, PhoneCall, Mail, Calendar, ArrowRight, BarChart, TrendingUp } from 'lucide-react';
+
+const LeadManagement = () => {
+  const [leads] = useState([
+    {
+      id: 1,
+      name: 'Carlos Martínez',
+      source: 'Idealista',
+      status: 'Calificado',
+      interest: 'Compra',
+      budget: '300k-400k',
+      lastContact: '2024-03-09',
+      nextAction: 'Llamada seguimiento',
+      score: 85,
+      interactions: [
+        { type: 'email', date: '2024-03-08', description: 'Envío información' },
+        { type: 'call', date: '2024-03-07', description: 'Primera llamada' }
+      ]
+    }
+  ]);
+
+  const metrics = {
+    newLeads: 24,
+    qualified: 12,
+    conversion: 45,
+    avgResponse: '2.5h'
+  };
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Gestión de Leads</h1>
+          <p className="text-gray-500">Vista general de leads y conversiones</p>
+        </div>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Nuevo Lead
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <MetricCard
+          title="Nuevos Leads"
+          value={metrics.newLeads}
+          change="+12%"
+          icon={<Users className="text-blue-500" />}
+        />
+        <MetricCard
+          title="Leads Calificados"
+          value={metrics.qualified}
+          change="+8%"
+          icon={<TrendingUp className="text-green-500" />}
+        />
+        <MetricCard
+          title="Tasa Conversión"
+          value={`${metrics.conversion}%`}
+          change="+5%"
+          icon={<BarChart className="text-purple-500" />}
+        />
+        <MetricCard
+          title="Tiempo Respuesta"
+          value={metrics.avgResponse}
+          change="-30min"
+          icon={<Clock className="text-orange-500" />}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Pipeline de Leads</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="divide-y">
+                {leads.map(lead => (
+                  <LeadRow key={lead.id} lead={lead} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="lg:col-span-1">
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Próximas Acciones</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <ActionItem
+                  type="call"
+                  lead="Carlos Martínez"
+                  description="Llamada seguimiento"
+                  time="14:30"
+                />
+                <ActionItem
+                  type="meeting"
+                  lead="Ana García"
+                  description="Visita propiedad"
+                  time="16:00"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Fuentes de Leads</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <SourceStats name="Idealista" percentage={45} count={32} />
+                <SourceStats name="Fotocasa" percentage={30} count={21} />
+                <SourceStats name="Web" percentage={15} count={11} />
+                <SourceStats name="Referidos" percentage={10} count={7} />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MetricCard = ({ title, value, change, icon }) => (
+  <Card>
+    <CardContent className="p-6">
+      <div className="flex justify-between items-start">
+        {icon}
+        <span className={`text-sm ${change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+          {change}
+        </span>
+      </div>
+      <div className="mt-4">
+        <h3 className="text-gray-500 text-sm">{title}</h3>
+        <p className="text-2xl font-bold">{value}</p>
+      </div>
+    </CardContent>
+  </Card>
+);
+
+const LeadRow = ({ lead }) => (
+  <div className="py-4 flex items-center justify-between">
+    <div className="flex items-center gap-4">
+      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+        <span className="text-blue-600 font-medium">
+          {lead.name.split(' ').map(n => n[0]).join('')}
+        </span>
+      </div>
+      <div>
+        <p className="font-medium">{lead.name}</p>
+        <div className="flex gap-2 text-sm text-gray-500">
+          <span>{lead.source}</span>
+          <span>•</span>
+          <span>{lead.interest}</span>
+          <span>•</span>
+          <span>{lead.budget}</span>
+        </div>
+      </div>
+    </div>
+    <div className="flex items-center gap-6">
+      <LeadScore score={lead.score} />
+      <div className="flex gap-2">
+        <ActionButton icon={<PhoneCall size={18} />} />
+        <ActionButton icon={<Mail size={18} />} />
+        <ActionButton icon={<Calendar size={18} />} />
+      </div>
+      <button className="p-2 hover:bg-gray-100 rounded-full">
+        <ArrowRight size={20} className="text-gray-400" />
+      </button>
+    </div>
+  </div>
+);
+
+const LeadScore = ({ score }) => (
+  <div className="flex items-center gap-2">
+    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
+      <span className="text-sm text-green-600 font-medium">{score}</span>
+    </div>
+    <span className="text-sm text-gray-500">Score</span>
+  </div>
+);
+
+const ActionButton = ({ icon }) => (
+  <button className="p-2 hover:bg-gray-100 rounded-full text-gray-500 hover:text-gray-700">
+    {icon}
+  </button>
+);
+
+const ActionItem = ({ type, lead, description, time }) => {
+  const icons = {
+    call: <PhoneCall size={16} />,
+    meeting: <Calendar size={16} />
+  };
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="p-
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar, Clock, MapPin, Users, Check, X } from 'lucide-react';
+
+const CalendarScheduler = () => {
+  const [appointments] = useState([
+    {
+      id: 1,
+      type: 'Visita',
+      property: 'Ático Gran Vía',
+      client: 'María López',
+      date: '2024-03-10',
+      time: '10:00',
+      status: 'confirmed',
+      agent: 'Juan Pérez'
+    }
+  ]);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Calendario</h1>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Nueva Cita
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Card>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-7 gap-4">
+                {Array.from({ length: 31 }, (_, i) => (
+                  <DayCell
+                    key={i}
+                    day={i + 1}
+                    events={3}
+                    isSelected={i + 1 === selectedDate.getDate()}
+                    onClick={() => setSelectedDate(new Date(2024, 2, i + 1))}
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle>Citas del Día</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {appointments.map(appointment => (
+                  <AppointmentCard key={appointment.id} appointment={appointment} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="lg:col-span-1">
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Métricas del Mes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <MetricItem label="Total Citas" value="45" change="+12%" />
+                <MetricItem label="Tasa Confirmación" value="85%" change="+5%" />
+                <MetricItem label="Cancelaciones" value="8%" change="-2%" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Próximas Disponibilidades</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <TimeSlot time="15:00" date="Hoy" available={true} />
+                <TimeSlot time="16:30" date="Hoy" available={false} />
+                <TimeSlot time="10:00" date="Mañana" available={true} />
+                <TimeSlot time="12:00" date="Mañana" available={true} />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const DayCell = ({ day, events, isSelected, onClick }) => (
+  <div
+    onClick={onClick}
+    className={`p-4 rounded-lg border cursor-pointer transition-colors
+      ${isSelected ? 'bg-blue-50 border-blue-500' : 'hover:bg-gray-50'}`}
+  >
+    <span className="block text-center font-medium mb-2">{day}</span>
+    {events > 0 && (
+      <div className="flex justify-center">
+        <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+          {events} citas
+        </span>
+      </div>
+    )}
+  </div>
+);
+
+const AppointmentCard = ({ appointment }) => (
+  <div className="flex items-center justify-between p-4 border rounded-lg">
+    <div className="flex items-center gap-4">
+      <div className="p-3 bg-blue-100 rounded-lg">
+        <Calendar className="text-blue-600" size={24} />
+      </div>
+      <div>
+        <h3 className="font-medium">{appointment.type} - {appointment.property}</h3>
+        <div className="text-sm text-gray-500 space-y-1">
+          <div className="flex items-center gap-2">
+            <Clock size={16} />
+            <span>{appointment.time}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Users size={16} />
+            <span>{appointment.client}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="flex items-center gap-2">
+      <button className="p-2 text-green-600 hover:bg-green-50 rounded-full">
+        <Check size={20} />
+      </button>
+      <button className="p-2 text-red-600 hover:bg-red-50 rounded-full">
+        <X size={20} />
+      </button>
+    </div>
+  </div>
+);
+
+const MetricItem = ({ label, value, change }) => (
+  <div className="flex justify-between items-center">
+    <span className="text-gray-600">{label}</span>
+    <div className="flex items-center gap-2">
+      <span className="font-medium">{value}</span>
+      <span className={`text-sm ${change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+        {change}
+      </span>
+    </div>
+  </div>
+);
+
+const TimeSlot = ({ time, date, available }) => (
+  <div className="flex items-center justify-between p-3 border rounded-lg">
+    <div className="flex items-center gap-3">
+      <Clock size={20} className="text-gray-400" />
+      <div>
+        <p className="font-medium">{time}</p>
+        <p className="text-sm text-gray-500">{date}</p>
+      </div>
+    </div>
+    <span className={`px-2 py-1 rounded-full text-sm
+      ${available ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+      {available ? 'Disponible' : 'Ocupado'}
+    </span>
+  </div>
+);
+
+export default CalendarScheduler;
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LineChart, BarChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { TrendingUp, TrendingDown, Users, Home, Euro, BarChart2 } from 'lucide-react';
+
+const AnalyticsDashboard = () => {
+  const salesData = [
+    { month: 'Ene', ventas: 450000, leads: 45, conversion: 15 },
+    { month: 'Feb', ventas: 520000, leads: 52, conversion: 18 },
+    { month: 'Mar', ventas: 480000, leads: 48, conversion: 16 }
+  ];
+
+  const propertyMetrics = {
+    totalProperties: 145,
+    avgPrice: 320000,
+    avgDaysListed: 45,
+    viewsPerProperty: 125
+  };
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
+        <p className="text-gray-500">Vista general del rendimiento</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <MetricCard
+          title="Ventas Totales"
+          value="€1.45M"
+          change="+12.5%"
+          icon={<Euro />}
+          trend="up"
+        />
+        <MetricCard
+          title="Propiedades Activas"
+          value="145"
+          change="+8.2%"
+          icon={<Home />}
+          trend="up"
+        />
+        <MetricCard
+          title="Leads Nuevos"
+          value="52"
+          change="-3.1%"
+          icon={<Users />}
+          trend="down"
+        />
+        <MetricCard
+          title="Tasa Conversión"
+          value="18%"
+          change="+5.4%"
+          icon={<BarChart2 />}
+          trend="up"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Evolución de Ventas</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={salesData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="ventas" stroke="#2563eb" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Conversión de Leads</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={salesData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="leads" fill="#3b82f6" />
+                  <Bar dataKey="conversion" fill="#10b981" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Métricas de Propiedades</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              <PropertyMetric
+                label="Precio Medio"
+                value={`€${propertyMetrics.avgPrice.toLocaleString()}`}
+              />
+              <PropertyMetric
+                label="Días en Mercado"
+                value={propertyMetrics.avgDaysListed}
+              />
+              <PropertyMetric
+                label="Vistas por Propiedad"
+                value={propertyMetrics.viewsPerProperty}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>Rendimiento por Zona</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <AreaPerformance
+                area="Centro"
+                sales={12}
+                avgPrice="€380k"
+                leads={24}
+                performance={95}
+              />
+              <AreaPerformance
+                area="Abando"
+                sales={8}
+                avgPrice="€420k"
+                leads={18}
+                performance={88}
+              />
+              <AreaPerformance
+                area="Indautxu"
+                sales={10}
+                avgPrice="€350k"
+                leads={22}
+                performance={92}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+const MetricCard = ({ title, value, change, icon, trend }) => (
+  <Card>
+    <CardContent className="p-6">
+      <div className="flex justify-between items-start mb-4">
+        <div className="p-2 bg-blue-100 rounded-lg">
+          {React.cloneElement(icon, { className: 'text-blue-600' })}
+        </div>
+        <span className={`flex items-center ${
+          trend === 'up' ? 'text-green-500' : 'text-red-500'
+        }`}>
+          {trend === 'up' ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+          <span className="ml-1">{change}</span>
+        </span>
+      </div>
+      <div>
+        <p className="text-sm text-gray-500">{title}</p>
+        <p className="text-2xl font-bold mt-1">{value}</p>
+      </div>
+    </CardContent>
+  </Card>
+);
+
+const PropertyMetric = ({ label, value }) => (
+  <div className="flex justify-between items-center">
+    <span className="text-gray-600">{label}</span>
+    <span className="font-medium">{value}</span>
+  </div>
+);
+
+const AreaPerformance = ({ area, sales, avgPrice, leads, performance }) => (
+  <div className="p-4 border rounded-lg">
+    <div className="flex justify-between items-center mb-4">
+      <h3 className="font-medium">{area}</h3>
+      <span className="text-sm text-gray-500">{performance}% objetivo</span>
+    </div>
+    <div className="grid grid-cols-3 gap-4">
+      <div>
+        <p className="text-sm text-gray-500">Ventas</p>
+        <p className="font-medium">{sales}</p>
+      </div>
+      <div>
+        <p className="text-sm text-gray-500">Precio Medio</p>
+        <p className="font-medium">{avgPrice}</p>
+      </div>
+      <div>
+        <p className="text-sm text-gray-500">Leads</p>
+        <p className="font-medium">{leads}</p>
+      </div>
+    </div>
+    <div className="
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckSquare, Clock, AlertCircle, Calendar, Users, Phone, Mail, Flag } from 'lucide-react';
+
+const TaskManagement = () => {
+  const [tasks] = useState({
+    pending: [
+      {
+        id: 1,
+        title: 'Llamar a cliente potencial',
+        client: 'Roberto García',
+        property: 'Ático Gran Vía',
+        priority: 'alta',
+        dueDate: '2024-03-10',
+        type: 'call'
+      }
+    ],
+    inProgress: [
+      {
+        id: 2,
+        title: 'Preparar documentación',
+        client: 'María Sánchez',
+        property: 'Piso Indautxu',
+        priority: 'media',
+        dueDate: '2024-03-11',
+        type: 'document'
+      }
+    ],
+    completed: [
+      {
+        id: 3,
+        title: 'Visita propiedad',
+        client: 'Carlos López',
+        property: 'Chalet Neguri',
+        priority: 'alta',
+        completedDate: '2024-03-09',
+        type: 'visit'
+      }
+    ]
+  });
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Tareas</h1>
+          <p className="text-gray-500">Seguimiento y gestión de actividades</p>
+        </div>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Nueva Tarea
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <TaskColumn title="Pendientes" count={tasks.pending.length} tasks={tasks.pending} />
+        <TaskColumn title="En Progreso" count={tasks.inProgress.length} tasks={tasks.inProgress} />
+        <TaskColumn title="Completadas" count={tasks.completed.length} tasks={tasks.completed} />
+      </div>
+
+      <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Próximos Vencimientos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <UpcomingTask
+                title="Revisión documentos"
+                dueDate="Hoy"
+                priority="alta"
+                client="Ana Martínez"
+              />
+              <UpcomingTask
+                title="Seguimiento oferta"
+                dueDate="Mañana"
+                priority="media"
+                client="Pedro Ruiz"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Actividad Reciente</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <ActivityItem
+                type="call"
+                description="Llamada realizada a cliente"
+                time="Hace 2 horas"
+                user="Juan Pérez"
+              />
+              <ActivityItem
+                type="email"
+                description="Email enviado con información"
+                time="Hace 3 horas"
+                user="María García"
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+const TaskColumn = ({ title, count, tasks }) => (
+  <div>
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="font-semibold text-lg">{title}</h2>
+      <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm">
+        {count}
+      </span>
+    </div>
+    <div className="space-y-4">
+      {tasks.map(task => (
+        <TaskCard key={task.id} task={task} />
+      ))}
+    </div>
+  </div>
+);
+
+const TaskCard = ({ task }) => {
+  const priorityColors = {
+    alta: 'bg-red-100 text-red-800',
+    media: 'bg-yellow-100 text-yellow-800',
+    baja: 'bg-green-100 text-green-800'
+  };
+
+  const typeIcons = {
+    call: <Phone size={16} />,
+    document: <FileText size={16} />,
+    visit: <Home size={16} />,
+    email: <Mail size={16} />
+  };
+
+  return (
+    <Card className="hover:shadow-md transition-shadow">
+      <CardContent className="p-4">
+        <div className="flex justify-between items-start mb-3">
+          <div className="flex items-center gap-2">
+            {typeIcons[task.type]}
+            <span className="font-medium">{task.title}</span>
+          </div>
+          <span className={`px-2 py-1 rounded-full text-xs ${priorityColors[task.priority]}`}>
+            {task.priority}
+          </span>
+        </div>
+        
+        <div className="space-y-2 text-sm text-gray-500">
+          <div className="flex items-center gap-2">
+            <Users size={16} />
+            <span>{task.client}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Home size={16} />
+            <span>{task.property}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Calendar size={16} />
+            <span>{task.dueDate || task.completedDate}</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+const UpcomingTask = ({ title, dueDate, priority, client }) => {
+  const priorityColors = {
+    alta: 'text-red-600',
+    media: 'text-yellow-600',
+    baja: 'text-green-600'
+  };
+
+  return (
+    <div className="flex items-center justify-between p-3 border rounded-lg">
+      <div className="flex items-center gap-3">
+        <Clock size={20} className={priorityColors[priority]} />
+        <div>
+          <p className="font-medium">{title}</p>
+          <p className="text-sm text-gray-500">{client}</p>
+        </div>
+      </div>
+      <div className="text-right">
+        <span className="text-sm font-medium">{dueDate}</span>
+      </div>
+    </div>
+  );
+};
+
+const ActivityItem = ({ type, description, time, user }) => {
+  const icons = {
+    call: <Phone size={16} className="text-blue-500" />,
+    email: <Mail size={16} className="text-green-500" />
+  };
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="p-2 bg-gray-100 rounded-full">
+        {icons[type]}
+      </div>
+      <div className="flex-1">
+        <p className="font-medium">{description}</p>
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <span>{user}</span>
+          <span>•</span>
+          <span>{time}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TaskManagement;
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail, Send, Users, BarChart2, Eye, Clock, Settings, Plus } from 'lucide-react';
+
+const MarketingAutomation = () => {
+  const [campaigns] = useState([
+    {
+      id: 1,
+      name: 'Bienvenida Nuevos Leads',
+      type: 'Automatizada',
+      status: 'Activa',
+      stats: {
+        sent: 245,
+        opened: 180,
+        clicked: 85
+      },
+      lastTriggered: '2024-03-09'
+    }
+  ]);
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Marketing Automation</h1>
+          <p className="text-gray-500">Gestión de campañas y automatizaciones</p>
+        </div>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2">
+          <Plus size={20} />
+          Nueva Campaña
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <MetricCard
+          title="Emails Enviados"
+          value="1,234"
+          icon={<Send className="text-blue-500" />}
+          change="+12%"
+        />
+        <MetricCard
+          title="Tasa de Apertura"
+          value="68%"
+          icon={<Eye className="text-green-500" />}
+          change="+5%"
+        />
+        <MetricCard
+          title="Leads Generados"
+          value="85"
+          icon={<Users className="text-purple-500" />}
+          change="+8%"
+        />
+        <MetricCard
+          title="Conversión"
+          value="15%"
+          icon={<BarChart2 className="text-orange-500" />}
+          change="+3%"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Campañas Activas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {campaigns.map(campaign => (
+                  <CampaignCard key={campaign.id} campaign={campaign} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Automatizaciones</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <AutomationItem
+                  title="Post-Visita"
+                  description="Email de seguimiento después de visitas"
+                  status="active"
+                />
+                <AutomationItem
+                  title="Recordatorio Citas"
+                  description="Notificación 24h antes de visitas"
+                  status="active"
+                />
+                <AutomationItem
+                  title="Lead Scoring"
+                  description="Calificación automática de leads"
+                  status="paused"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Plantillas Email</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <EmailTemplate
+                  name="Bienvenida"
+                  uses={124}
+                  performance="85%"
+                />
+                <EmailTemplate
+                  name="Seguimiento"
+                  uses={98}
+                  performance="78%"
+                />
+                <EmailTemplate
+                  name="Promoción"
+                  uses={67}
+                  performance="92%"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MetricCard = ({ title, value, icon, change }) => (
+  <Card>
+    <CardContent className="p-6">
+      <div className="flex justify-between items-start mb-4">
+        {icon}
+        <span className="text-green-500 text-sm">{change}</span>
+      </div>
+      <p className="text-gray-500 text-sm">{title}</p>
+      <p className="text-2xl font-bold mt-1">{value}</p>
+    </CardContent>
+  </Card>
+);
+
+const CampaignCard = ({ campaign }) => (
+  <div className="p-4 border rounded-lg">
+    <div className="flex justify-between items-start mb-4">
+      <div>
+        <h3 className="font-medium">{campaign.name}</h3>
+        <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+          <span>{campaign.type}</span>
+          <span>•</span>
+          <span>Último trigger: {campaign.lastTriggered}</span>
+        </div>
+      </div>
+      <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+        {campaign.status}
+      </span>
+    </div>
+
+    <div className="grid grid-cols-3 gap-4">
+      <div>
+        <p className="text-sm text-gray-500">Enviados</p>
+        <p className="font-medium">{campaign.stats.sent}</p>
+      </div>
+      <div>
+        <p className="text-sm text-gray-500">Abiertos</p>
+        <p className="font-medium">{campaign.stats.opened}</p>
+      </div>
+      <div>
+        <p className="text-sm text-gray-500">Clicks</p>
+        <p className="font-medium">{campaign.stats.clicked}</p>
+      </div>
+    </div>
+  </div>
+);
+
+const AutomationItem = ({ title, description, status }) => (
+  <div className="flex items-center justify-between p-3 border rounded-lg">
+    <div className="flex items-center gap-3">
+      <Settings size={20} className="text-gray-400" />
+      <div>
+        <p className="font-medium">{title}</p>
+        <p className="text-sm text-gray-500">{description}</p>
+      </div>
+    </div>
+    <span className={`px-2 py-1 rounded-full text-sm ${
+      status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { LineChart, BarChart, PieChart, Line, Bar, Pie, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Download, Filter, Calendar, RefreshCcw } from 'lucide-react';
+
+const ReportingSystem = () => {
+  const [dateRange, setDateRange] = useState('Este mes');
+  const [selectedReport, setSelectedReport] = useState('ventas');
+
+  const reportData = {
+    ventas: [
+      { mes: 'Ene', valor: 450000, objetivo: 400000 },
+      { mes: 'Feb', valor: 520000, objetivo: 400000 },
+      { mes: 'Mar', valor: 480000, objetivo: 400000 }
+    ],
+    propiedades: {
+      tipo: [
+        { name: 'Pisos', value: 45 },
+        { name: 'Chalets', value: 25 },
+        { name: 'Áticos', value: 15 }
+      ],
+      zona: [
+        { name: 'Centro', value: 35 },
+        { name: 'Abando', value: 28 },
+        { name: 'Indautxu', value: 22 }
+      ]
+    }
+  };
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Informes</h1>
+          <p className="text-gray-500">Análisis y reportes detallados</p>
+        </div>
+        <div className="flex gap-3">
+          <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50">
+            <Calendar size={20} />
+            {dateRange}
+          </button>
+          <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50">
+            <Filter size={20} />
+            Filtros
+          </button>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2">
+            <Download size={20} />
+            Exportar
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2">
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Evolución de Ventas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={reportData.ventas}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="mes" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="valor" name="Ventas" stroke="#2563eb" />
+                    <Line type="monotone" dataKey="objetivo" name="Objetivo" stroke="#10b981" strokeDasharray="5 5" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Distribución por Tipo</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={reportData.propiedades.tipo}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        fill="#2563eb"
+                      />
+                      <Tooltip />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Distribución por Zona</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={reportData.propiedades.zona}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="value" fill="#3b82f6" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>KPIs Principales</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <KPIItem 
+                  label="Ventas Totales" 
+                  value="€1.45M" 
+                  change="+12.5%" 
+                  target="€1.2M"
+                />
+                <KPIItem 
+                  label="Propiedades Vendidas" 
+                  value="24" 
+                  change="+8.2%" 
+                  target="20"
+                />
+                <KPIItem 
+                  label="Tiempo Medio Venta" 
+                  value="45 días" 
+                  change="-15%" 
+                  target="60 días"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Reportes Guardados</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <SavedReport
+                  name="Ventas Mensuales"
+                  type="Automático"
+                  frequency="Mensual"
+                  lastRun="2024-03-01"
+                />
+                <SavedReport
+                  name="ROI Marketing"
+                  type="Manual"
+                  frequency="Semanal"
+                  lastRun="2024-03-08"
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const KPIItem = ({ label, value, change, target }) => (
+  <div className="flex items-center justify-between">
+    <div>
+      <p className="text-gray-500 text-sm">{label}</p>
+      <div className="flex items-center gap-2">
+        <span className="text-xl font-bold">{value}</span>
+        <span className={`text-sm ${change.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>
+          {change}
+        </span>
+      </div>
+    </div>
+    <div className="text-right">
+      <p className="text-sm text-gray-500">Objetivo</p>
+      <p className="font-medium">{target}</p>
+    </div>
+  </div>
+);
+
+const SavedReport = ({ name, type, frequency, lastRun }) => (
+  <div className="flex items-center justify-between p-3 border rounded-lg">
+    <div>
+      <p className="font-medium">{name}</p>
+      <div className="flex items-center gap-2 text-sm text-gray-500">
+        <span>{type}</span>
+        <span>•</span>
+        <span>{frequency}</span>
+      </div>
+    </div>
+    <div className="flex items-center gap-3">
+      <span className="text-sm text-gray-500">
+        Último: {lastRun}
+      </span>
+      <button className="p-2 hover:bg-gray-100 rounded-full">
+        <RefreshCcw size={18} className="text-gray-500" />
+      </button>
+    </div>
+  </div>
+);
+
+export default ReportingSystem;
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Settings, User, Lock, Building, Bell, Globe, Database, Shield } from 'lucide-react';
+
+const SettingsModule = () => {
+  const [activeSection, setActiveSection] = useState('perfil');
+  
+  const sections = {
+    perfil: {
+      title: 'Perfil de Empresa',
+      icon: <Building />,
+      fields: [
+        { label: 'Nombre de Empresa', value: 'Inmobiliaria Castresana' },
+        { label: 'Email', value: 'contacto@castresana.com' },
+        { label: 'Teléfono', value: '+34 944 123 456' },
+        { label: 'Dirección', value: 'Gran Vía 1, Bilbao' },
+        { label: 'NIF', value: 'B12345678' }
+      ]
+    },
+    seguridad: {
+      title: 'Seguridad',
+      icon: <Lock />,
+      settings: [
+        { label: 'Autenticación de dos factores', enabled: true },
+        { label: 'Registro de actividad', enabled: true },
+        { label: 'Caducidad de contraseña', enabled: false }
+      ]
+    },
+    notificaciones: {
+      title: 'Notificaciones',
+      icon: <Bell />,
+      preferences: [
+        { label: 'Nuevos leads', email: true, push: true },
+        { label: 'Citas programadas', email: true, push: true },
+        { label: 'Documentos pendientes', email: true, push: false }
+      ]
+    },
+    integraciones: {
+      title: 'Integraciones',
+      icon: <Globe />,
+      services: [
+        { name: 'Idealista', status: 'connected', lastSync: '2024-03-09' },
+        { name: 'Fotocasa', status: 'connected', lastSync: '2024-03-09' },
+        { name: 'Gmail', status: 'pending', lastSync: null }
+      ]
+    }
+  };
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Configuración</h1>
+          <p className="text-gray-500">Gestiona la configuración del sistema</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <Card className="lg:col-span-1">
+          <CardContent className="p-4">
+            <nav className="space-y-2">
+              {Object.entries(sections).map(([key, section]) => (
+                <button
+                  key={key}
+                  onClick={() => setActiveSection(key)}
+                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors
+                    ${activeSection === key ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50'}`}
+                >
+                  {section.icon}
+                  <span>{section.title}</span>
+                </button>
+              ))}
+            </nav>
+          </CardContent>
+        </Card>
+
+        <div className="lg:col-span-3 space-y-6">
+          {activeSection === 'perfil' && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Información de la Empresa</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {sections.perfil.fields.map((field, index) => (
+                    <div key={index} className="grid grid-cols-2 gap-4">
+                      <label className="text-gray-500">{field.label}</label>
+                      <input
+                        type="text"
+                        value={field.value}
+                        className="p-2 border rounded-lg"
+                      />
+                    </div>
+                  ))}
+                  <div className="flex justify-end">
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                      Guardar Cambios
+                    </button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeSection === 'seguridad' && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Configuración de Seguridad</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {sections.seguridad.settings.map((setting, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">{setting.label}</p>
+                        <p className="text-sm text-gray-500">
+                          {setting.enabled ? 'Activado' : 'Desactivado'}
+                        </p>
+                      </div>
+                      <button className={`relative inline-flex h-6 w-11 items-center rounded-full
+                        ${setting.enabled ? 'bg-blue-600' : 'bg-gray-200'}`}>
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition
+                          ${setting.enabled ? 'translate-x-6' : 'translate-x-1'}`} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {activeSection === 'notificaciones' && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Preferencias de Notificaciones</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {sections.notificaciones.preferences.map((pref, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <p className="font-medium">{pref.label}</p>
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-2">
+                          <input
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Settings, Database, Shield, Globe, AlertCircle } from 'lucide-react';
+
+const AdvancedSettings = () => {
+  const [backupConfig] = useState({
+    frequency: 'daily',
+    retention: 30,
+    lastBackup: '2024-03-09 15:30',
+    status: 'success'
+  });
+
+  const [apiConfig] = useState({
+    idealista: {
+      apiKey: '****-****-****-****',
+      status: 'active',
+      requests: 1250,
+      limit: 2000
+    },
+    fotocasa: {
+      apiKey: '****-****-****-****',
+      status: 'active',
+      requests: 850,
+      limit: 1500
+    }
+  });
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Configuración de Copias de Seguridad</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex justify-between items-center p-4 border rounded-lg">
+              <div>
+                <h3 className="font-medium">Frecuencia de Backup</h3>
+                <p className="text-sm text-gray-500">Actual: {backupConfig.frequency}</p>
+              </div>
+              <select className="p-2 border rounded-lg">
+                <option value="daily">Diario</option>
+                <option value="weekly">Semanal</option>
+                <option value="monthly">Mensual</option>
+              </select>
+            </div>
+
+            <div className="flex justify-between items-center p-4 border rounded-lg">
+              <div>
+                <h3 className="font-medium">Último Backup</h3>
+                <p className="text-sm text-gray-500">{backupConfig.lastBackup}</p>
+              </div>
+              <span className={`px-3 py-1 rounded-full text-sm ${
+                backupConfig.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+              }`}>
+                {backupConfig.status === 'success' ? 'Exitoso' : 'Error'}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center p-4 border rounded-lg">
+              <div>
+                <h3 className="font-medium">Retención de Datos</h3>
+                <p className="text-sm text-gray-500">{backupConfig.retention} días</p>
+              </div>
+              <button className="text-blue-600 hover:underline">
+                Modificar
+              </button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Configuración de APIs</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {Object.entries(apiConfig).map(([portal, config]) => (
+              <div key={portal} className="p-4 border rounded-lg">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h3 className="font-medium capitalize">{portal}</h3>
+                    <p className="text-sm text-gray-500">API Key: {config.apiKey}</p>
+                  </div>
+                  <span className={`px-2 py-1 rounded-full text-sm ${
+                    config.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {config.status}
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>Peticiones: {config.requests}/{config.limit}</span>
+                  <button className="text-blue-600 hover:underline">
+                    Renovar Key
+                  </button>
+                </div>
+                <div className="mt-2 h-2 bg-gray-200 rounded-full">
+                  <div
+                    className="h-2 bg-blue-600 rounded-full"
+                    style={{ width: `${(config.requests/config.limit) * 100}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Configuración de RGPD</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <PrivacyControl
+              title="Retención de Datos de Cliente"
+              description="Período de almacenamiento de datos personales"
+              value="24 meses"
+            />
+            <PrivacyControl
+              title="Consentimiento de Cookies"
+              description="Configuración de banner y preferencias"
+              value="Activado"
+            />
+            <PrivacyControl
+              title="Registro de Actividad"
+              description="Seguimiento de acciones de usuarios"
+              value="Activado"
+            />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+const PrivacyControl = ({ title, description, value }) => (
+  <div className="flex justify-between items-center p-4 border rounded-lg">
+    <div>
+      <h3 className="font-medium">{title}</h3>
+      <p className="text-sm text-gray-500">{description}</p>
+    </div>
+    <div className="text-right">
+      <span className="font-medium">{value}</span>
+      <button className="block text-sm text-blue-600 hover:underline">
+        Configurar
+      </button>
+    </div>
+  </div>
+);
+
+export default AdvancedSettings;
